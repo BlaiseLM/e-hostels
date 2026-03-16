@@ -7,3 +7,6 @@
 ## Getting Started
 
 ## Contributors
+- Blaise Mahamoodally (300436389)
+- (...)
+- (...)
