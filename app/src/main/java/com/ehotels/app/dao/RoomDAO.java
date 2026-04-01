@@ -53,9 +53,9 @@ public class RoomDAO {
         jdbcTemplate.update(sql, roomNumber, hotelAddress, chainName, amenity);
     }
 
-    // waiting for query
     public void insertDamage(int roomNumber, String hotelAddress, String chainName, String damage){ 
-        
+        String sql = "INSERT INTO damages (room_number, hotel_address, chain_name, damage) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, roomNumber, hotelAddress, chainName, damage);
     }
 
     public void deleteDamage(int roomNumber, String hotelAddress, String chainName, String damage) {

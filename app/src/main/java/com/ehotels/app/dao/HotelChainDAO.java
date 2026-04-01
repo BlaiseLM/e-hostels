@@ -3,9 +3,12 @@ package com.ehotels.app.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.regex.Pattern;
+
 @Repository
 public class HotelChainDAO {
 
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
     private final JdbcTemplate jdbcTemplate;
 
     public HotelChainDAO(JdbcTemplate jdbcTemplate) {
@@ -13,17 +16,17 @@ public class HotelChainDAO {
     }
 
     public void insertChain(String name, String centralOfficeAddress){ 
-        String sql = "INSERT INTO hotel_chain (name, central_office_name) VALUES (?, ?)"; 
+        String sql = "INSERT INTO hotel_chain (name, central_office_address) VALUES (?, ?)"; 
         jdbcTemplate.update(sql, name, centralOfficeAddress); 
     }
 
     public void updateChainAddress(String name, String newAddress){
-        String sql = "UPDATE hotel_chain SET address = ? WHERE name = ?"; 
+        String sql = "UPDATE hotel_chain SET central_office_address = ? WHERE name = ?"; 
         jdbcTemplate.update(sql, newAddress, name); 
     }
 
     public void deleteChain(String name){ 
-        String sql = "DELETE hotel_chain WHERE name = ?"; 
+        String sql = "DELETE FROM hotel_chain WHERE name = ?"; 
         jdbcTemplate.update(sql, name); 
     }
 
@@ -38,6 +41,9 @@ public class HotelChainDAO {
     }
 
     public void insertChainEmail(String chainName, String email){ 
+        if (!isValidEmail(email)) {
+            throw new IllegalArgumentException("Invalid email format: " + email);
+        }
         String sql = "INSERT INTO chain_emails (name, email) VALUES (?, ?)";
         jdbcTemplate.update(sql, chainName, email); 
     }
@@ -45,6 +51,10 @@ public class HotelChainDAO {
     public void deleteChainEmail(String chainName, String email){ 
         String sql = "DELETE FROM chain_emails WHERE name = ? AND email = ?"; 
         jdbcTemplate.update(sql, chainName, email); 
+    }
+
+    private boolean isValidEmail(String email) {
+        return email != null && EMAIL_PATTERN.matcher(email).matches();
     }
 
 }
