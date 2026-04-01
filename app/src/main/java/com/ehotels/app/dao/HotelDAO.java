@@ -3,8 +3,12 @@ package com.ehotels.app.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.regex.Pattern;
+
 @Repository
 public class HotelDAO {
+
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -38,6 +42,9 @@ public class HotelDAO {
     }
 
     public void insertHotelEmail(String chainName, String address, String email) {
+        if (!isValidEmail(email)) {
+            throw new IllegalArgumentException("Invalid email format: " + email);
+        }
         String sql = "INSERT INTO hotel_emails (chain_name, address, email) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, chainName, address, email);
     }
@@ -45,6 +52,10 @@ public class HotelDAO {
     public void deleteHotelEmail(String chainName, String address, String email) {
         String sql = "DELETE FROM hotel_emails WHERE chain_name = ? AND address = ? AND email = ?";
         jdbcTemplate.update(sql, chainName, address, email);
+    }
+
+    private boolean isValidEmail(String email) {
+        return email != null && EMAIL_PATTERN.matcher(email).matches();
     }
 
 }
