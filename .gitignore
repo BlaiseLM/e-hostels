@@ -35,3 +35,4 @@ build/
 ### Other ###
 *:Zone.Identifier
 app/src/main/resources/application.properties
+/docs
