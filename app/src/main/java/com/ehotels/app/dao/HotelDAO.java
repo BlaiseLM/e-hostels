@@ -3,6 +3,9 @@ package com.ehotels.app.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Repository
@@ -52,6 +55,38 @@ public class HotelDAO {
     public void deleteHotelEmail(String chainName, String address, String email) {
         String sql = "DELETE FROM hotel_emails WHERE chain_name = ? AND address = ? AND email = ?";
         jdbcTemplate.update(sql, chainName, address, email);
+    }
+
+    public List<Map<String, Object>> searchHotels(String chainName, String address, Integer starRating, String phoneNumber, String email) {
+        List<String> filters = new ArrayList<>();
+        List<Object> params = new ArrayList<>();
+        if (chainName != null) {
+            filters.add("hot.chain_name = ?");
+            params.add(chainName);
+        }
+        if (address != null) {
+            filters.add("hot.address = ?");
+            params.add(address);
+        }
+        if (starRating != null) {
+            filters.add("hot.star_rating = ?");
+            params.add(starRating);
+        }
+        if (phoneNumber != null) {
+            filters.add("hp.phone_number = ?");
+            params.add(phoneNumber);
+        }
+        if (email != null) {
+            filters.add("he.email = ?");
+            params.add(email);
+        }
+        String sql = "SELECT hot.*, hp.phone_number, he.email FROM hotel hot " +
+                     "JOIN hotel_phone_numbers hp ON hot.chain_name = hp.chain_name AND hot.address = hp.address " +
+                     "JOIN hotel_emails he ON hot.chain_name = he.chain_name AND hot.address = he.address";
+        if (!filters.isEmpty()) {
+            sql += " WHERE " + String.join(" AND ", filters);
+        }
+        return jdbcTemplate.queryForList(sql, params.toArray());
     }
 
     private boolean isValidEmail(String email) {
