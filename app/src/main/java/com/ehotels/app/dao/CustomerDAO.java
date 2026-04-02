@@ -2,6 +2,7 @@ package com.ehotels.app.dao;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -58,5 +59,35 @@ public class CustomerDAO {
         String sql = "UPDATE customer SET " + String.join(", ", assignments) + " WHERE id = ?";
         params.add(id);
         jdbcTemplate.update(sql, params.toArray());
+    }
+
+    public List<Map<String, Object>> searchCustomers(String lastName, String address, String idType, String idValue, LocalDate registrationDate) {
+        List<String> filters = new ArrayList<>();
+        List<Object> params = new ArrayList<>();
+        if (lastName != null) {
+            filters.add("last_name = ?");
+            params.add(lastName);
+        }
+        if (address != null) {
+            filters.add("address = ?");
+            params.add(address);
+        }
+        if (idType != null) {
+            filters.add("id_type = ?");
+            params.add(idType);
+        }
+        if (idValue != null) {
+            filters.add("id_value = ?");
+            params.add(idValue);
+        }
+        if (registrationDate != null) {
+            filters.add("registration_date = ?");
+            params.add(registrationDate);
+        }
+        String sql = "SELECT * FROM customer";
+        if (!filters.isEmpty()) {
+            sql += " WHERE " + String.join(" AND ", filters);
+        }
+        return jdbcTemplate.queryForList(sql, params.toArray());
     }
 }

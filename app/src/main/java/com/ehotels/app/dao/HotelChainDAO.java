@@ -3,6 +3,9 @@ package com.ehotels.app.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Repository
@@ -53,8 +56,32 @@ public class HotelChainDAO {
         jdbcTemplate.update(sql, chainName, email); 
     }
 
+    public List<Map<String, Object>> searchHotelChain(String chainName, String phoneNumber, String email) {
+        List<String> filters = new ArrayList<>();
+        List<Object> params = new ArrayList<>();
+        if (chainName != null) {
+            filters.add("hc.name = ?");
+            params.add(chainName);
+        }
+        if (phoneNumber != null) {
+            filters.add("cp.phone_number = ?");
+            params.add(phoneNumber);
+        }
+        if (email != null) {
+            filters.add("ce.email = ?");
+            params.add(email);
+        }
+        String sql = "SELECT hc.name, cp.phone_number, ce.email FROM hotel_chain hc " +
+                     "JOIN chain_emails ce ON hc.name = ce.name " +
+                     "JOIN chain_phone_numbers cp ON hc.name = cp.name";
+        if (!filters.isEmpty()) {
+            sql += " WHERE " + String.join(" AND ", filters);
+        }
+        return jdbcTemplate.queryForList(sql, params.toArray());
+    }
+
     private boolean isValidEmail(String email) {
         return email != null && EMAIL_PATTERN.matcher(email).matches();
     }
-
+    
 }
