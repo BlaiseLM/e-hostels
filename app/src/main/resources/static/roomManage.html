@@ -1,58 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>room manage page</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <title>room manage page</title>
+    </head>
+    <body>
+        <h1>room manage page</h1>
+        <p>room info input</p>
 
-<body>
-<h1>room manage page</h1>
-<p>room info input</p>
+        <input type="text" placeholder="room number"><br>
+        <input type="text" placeholder="Hotel Chain"><br>
 
-<div>
-    <input type="text" placeholder="room number"><br>
-    <input type="text" placeholder="Hotel Chain"><br>
+        <p>
+            Price:
+            <input type="text" placeholder="min price">
+            <input type="text" placeholder="max price"><br>
+        </p>
 
-    <p>
-        Price:
-        <input type="text" placeholder="min price">
-        <input type="text" placeholder="max price"><br>
-    </p>
+        <p>Capacity:
+            <select>
+                <option> single</option>
+                <option> double</option>
+                <option> triple</option>
+            </select>
+        </p>
 
-    <p>Capacity:
-        <select>
-            <option> single</option>
-            <option> double</option>
-            <option> triple</option>
-        </select>
-    </p>
+        <p>View Option:
+            <select>
+                <option>McDonald</option>
+                <option>Sea</option>
+                <option>Mountain</option>
+            </select>
+        </p>
 
-    <p>View Option:
-        <select>
-            <option>McDonald</option>
-            <option>Sea</option>
-            <option>Mountain</option>
-        </select>
-    </p>
+        <input type="text" placeholder="Amenity"><br>
+        <input type="text" placeholder="Damage"><br>
 
-    <input type="text" placeholder="Amenity"><br>
-    <input type="text" placeholder="Damage"><br>
+        <p>
+            star rating:
+            <select>
+                <option value="1">1 star</option>
+                <option value="2">2 stars</option>
+                <option value="3">3 stars</option>
+                <option value="4">4 stars</option>
+                <option value="5">5 stars</option>
+            </select>
+        </p>
 
-    <p>
-        star rating:
-        <select>
-            <option value="1">1 star</option>
-            <option value="2">2 stars</option>
-            <option value="3">3 stars</option>
-            <option value="4">4 stars</option>
-            <option value="5">5 stars</option>
-        </select>
-    </p>
-</div>
-<button>(search) hotel</button>
-<button>add</button>
-<button>edit</button>
-<button>delete</button>
-<p>[output will come here]</p>
-</body>
+        <button>(search) room</button>
+        <button>add</button>
+        <button>edit</button>
+        <button>delete</button>
+        <p>[output will come here]</p>
+    </body>
 </html>
