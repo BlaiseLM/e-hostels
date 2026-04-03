@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>main page</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+            .checked {
+              color: orange;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>searchRoom page</h1>
+
+        <div class="star-rating">
+            <p>star</p>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <select>
+                <option value="1">1 star</option>
+                <option value="2">2 stars</option>
+                <option value="3">3 stars</option>
+                <option value="4">4 stars</option>
+                <option value="5">5 stars</option>
+            </select>
+        </div>
+
+        <div>
+            <form action="serverpage"> <!--might use Flatpickr in the future-->
+                <label for="startDate">startDate:</label>
+                <input type="startDate" id="startDate" name="startDate">
+                <br>
+                <label for="endDate">endDate:</label>
+                <input type="endDate" id="endDate" name="endDate">
+            </form>
+        </div>
+
+        <div>
+            <p>room size</p>
+            <select>
+                <option>Single</option>
+                <option>Double</option>
+            </select>
+        </div>
+
+        <div>
+            <p>location</p>
+            <input type="text" placeholder="Enter area">
+        </div>
+
+        <div>
+            <p>hotel chain</p>
+            <input type="text" placeholder="Enter hotel chain">
+        </div>
+
+        <div>
+            <p>hotel's total rooms</p>
+            <input type="text" placeholder="Enter total room value">
+        </div>
+
+        <div>
+            <p>price</p>
+            <input type="number" placeholder="Enter price range">
+        </div>
+
+    </body>
+</html>
