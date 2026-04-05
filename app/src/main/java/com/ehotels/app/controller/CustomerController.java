@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*; 
 
 
@@ -55,12 +54,13 @@ public class CustomerController {
 
     @GetMapping("/search")
     public ResponseEntity<List<Map<String, Object>>> search(
+        @RequestParam(required = false) String firstName, 
         @RequestParam(required = false) String lastName,
         @RequestParam(required = false) String address,
         @RequestParam(required = false) String idType,
         @RequestParam(required = false) String idValue,
         @RequestParam(required = false) LocalDate registrationDate
     ) {
-        return ResponseEntity.ok(customerDAO.searchCustomers(lastName, address, idType, idValue, registrationDate));
+        return ResponseEntity.ok(customerDAO.searchCustomers(firstName, lastName, address, idType, idValue, registrationDate));
     }
 }
