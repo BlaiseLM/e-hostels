@@ -61,9 +61,13 @@ public class CustomerDAO {
         jdbcTemplate.update(sql, params.toArray());
     }
 
-    public List<Map<String, Object>> searchCustomers(String lastName, String address, String idType, String idValue, LocalDate registrationDate) {
+    public List<Map<String, Object>> searchCustomers(String firstName, String lastName, String address, String idType, String idValue, LocalDate registrationDate) {
         List<String> filters = new ArrayList<>();
         List<Object> params = new ArrayList<>();
+        if (firstName != null) {
+            filters.add("first_name = ?");
+            params.add(firstName);
+        }
         if (lastName != null) {
             filters.add("last_name = ?");
             params.add(lastName);
