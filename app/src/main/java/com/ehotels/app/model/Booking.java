@@ -1,7 +1,7 @@
 package com.ehotels.app.model;
 import java.time.LocalDate;
 
-public record Renting(
+public record Booking(
     Integer id,
     Integer roomNumber, 
     String hotelAddress, 
@@ -9,6 +9,5 @@ public record Renting(
     Integer customerId, 
     LocalDate startDate, 
     LocalDate endDate, 
-    LocalDate registrationDate, 
-    Integer payment
+    LocalDate registrationDate
 ){}
