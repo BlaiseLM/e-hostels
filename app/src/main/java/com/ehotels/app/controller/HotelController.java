@@ -136,8 +136,8 @@ public class HotelController {
     //room controller
 
     @PostMapping("/room")
-    public ResponseEntity<?> insertRoom(@RequestParam int number, @RequestParam String hotelAddress, @RequestParam String chainName) {
-        roomDAO.insertRoom(number, hotelAddress, chainName);
+    public ResponseEntity<?> insertRoom(@RequestParam int number, @RequestParam String hotelAddress, @RequestParam String chainName, @RequestParam double priceInDollars, @RequestParam int capacity, @RequestParam String viewOption, @RequestParam boolean extendable) {
+        roomDAO.insertRoom(number, hotelAddress, chainName, priceInDollars, capacity, viewOption, extendable);
         return ResponseEntity.ok().build();
     }
 

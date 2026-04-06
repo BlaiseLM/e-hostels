@@ -12,9 +12,9 @@ public class RoomDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void insertRoom(int number, String hotelAddress, String chainName) {
-        String sql = "INSERT INTO room (number, hotel_address, chain_name) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, number, hotelAddress, chainName);
+    public void insertRoom(int number, String hotelAddress, String chainName, double priceInDollars, int capacity, String viewOption, boolean extendable) { //adien: I added variable priceInDollars, capacity, viewOption, and extendable to this method since they are required fields in the database.
+        String sql = "INSERT INTO room (number, hotel_address, chain_name, price, capacity, view_option, extendability) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, number, hotelAddress, chainName, Math.round(priceInDollars * 100), capacity, viewOption, extendable);
     }
 
     public void deleteRoom(int number, String hotelAddress, String chainName) {

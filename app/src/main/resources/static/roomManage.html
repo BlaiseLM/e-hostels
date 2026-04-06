@@ -8,49 +8,226 @@
         <h1>room manage page</h1>
         <p>room info input</p>
 
-        <input type="text" placeholder="room number"><br>
-        <input type="text" placeholder="Hotel Chain"><br>
+        <input id = "number" type="text" placeholder="room number"><br>
+        <input id = "chainName" type="text" placeholder="Hotel Chain"><br>
+        <input id = "hotelAddress" type="text" placeholder="Hotel Address"><br><br>
 
-        <p>
+        <div>
             Price:
-            <input type="text" placeholder="min price">
-            <input type="text" placeholder="max price"><br>
-        </p>
+            <input id = "price" type="text" placeholder="price">
+            <button id ="priceEditButton">edit</button><br>
+        </div>
 
-        <p>Capacity:
-            <select>
-                <option> single</option>
-                <option> double</option>
-                <option> triple</option>
+        <div>Capacity:
+            <select id = "capacity">
+                <option value="1"> single</option>
+                <option value="2"> double</option>
+                <option value="3"> triple</option>
             </select>
-        </p>
+            <button id ="capacityEditButton">edit</button>
+        </div>
 
-        <p>View Option:
-            <select>
-                <option>McDonald</option>
-                <option>Sea</option>
-                <option>Mountain</option>
+        <div>View Option:
+            <select id = "view">
+                <option value ="sea">sea</option>
+                <option value ="mountain">mountain</option>
             </select>
-        </p>
+            <button id ="viewEditButton">edit</button>
+        </div>
 
-        <input type="text" placeholder="Amenity"><br>
-        <input type="text" placeholder="Damage"><br>
-
-        <p>
-            star rating:
-            <select>
-                <option value="1">1 star</option>
-                <option value="2">2 stars</option>
-                <option value="3">3 stars</option>
-                <option value="4">4 stars</option>
-                <option value="5">5 stars</option>
+        <div>Extendable:
+            <select id="extendable">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
             </select>
-        </p>
+            <button id ="extendableEditButton">edit</button>
+        </div><br>
 
-        <button>(search) room</button>
-        <button>add</button>
-        <button>edit</button>
-        <button>delete</button>
-        <p>[output will come here]</p>
+        <input id = "amenity" type="text" placeholder="Amenity">
+        <button id = "amenityAddButton">add</button>
+        <button id = "amenityDeleteButton">delete</button><br>
+
+
+        <input id ="damage" type="text" placeholder="Damage">
+        <button id = "damageAddButton">add</button>
+        <button id="damageDeleteButton">delete</button><br><br>
+
+        <button id="addButton">add</button>
+        <button id="deleteButton">delete</button>
+        <div id="output">[output will come here]</div>
+
+        <script>
+
+            //room handle
+            document.getElementById("addButton").addEventListener("click", () => {
+                const number = document.getElementById("number").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+                const chainName = document.getElementById("chainName").value;
+                const price = document.getElementById("price").value;
+                const capacity = document.getElementById("capacity").value;
+                const viewOption = document.getElementById("view").value;
+                const extendable = document.getElementById("extendable").value;
+
+                fetch(`/hotels/room?number=${number}&hotelAddress=${hotelAddress}&chainName=${chainName}&priceInDollars=${price}&capacity=${capacity}&viewOption=${viewOption}&extendable=${extendable}`, {
+                    method: "POST"}).then(response => {
+                        if (response.ok) {
+                            document.getElementById("output").innerText = "Room added successfully!";
+                        } else {
+                            document.getElementById("output").innerText = "Failed to add room";
+                        }
+                });
+            });
+
+            document.getElementById("deleteButton").addEventListener("click", () => {
+                const number = document.getElementById("number").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+                const chainName = document.getElementById("chainName").value;
+
+                fetch(`/hotels/room?number=${number}&hotelAddress=${hotelAddress}&chainName=${chainName}`, {
+                    method: "DELETE"}).then(response => {
+                        if (response.ok) {
+                            document.getElementById("output").innerText = "Room deleted successfully!";
+                        } else {
+                            document.getElementById("output").innerText = "Failed to delete room";
+                        }
+                });
+            });
+
+            //price handle
+            document.getElementById("priceEditButton").addEventListener("click", () => {
+                const number = document.getElementById("number").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+                const chainName = document.getElementById("chainName").value;
+                const price = document.getElementById("price").value;
+
+                fetch(`/hotels/room/price?number=${number}&hotelAddress=${hotelAddress}&chainName=${chainName}&priceInDollars=${price}`, {
+                    method: "PUT"}).then(response => {
+                        if (response.ok) {
+                            document.getElementById("output").innerText = "Room price updated successfully!";
+                        } else {
+                            document.getElementById("output").innerText = "Failed to update room price";
+                        }
+                });
+            });
+
+            //capacity handle
+            document.getElementById("capacityEditButton").addEventListener("click", () => {
+                const number = document.getElementById("number").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+                const chainName = document.getElementById("chainName").value;
+                const capacity = document.getElementById("capacity").value;
+
+                fetch(`/hotels/room/capacity?number=${number}&hotelAddress=${hotelAddress}&chainName=${chainName}&capacity=${capacity}`,{
+                    method: "PUT"}). then(response => {
+                        if (response.ok) {
+                            document.getElementById("output").innerText = "Room capacity updated successfully!";
+                        } else {
+                            document.getElementById("output").innerText = "Failed to update room capacity";
+                        }
+                });
+            });
+
+            //view option handle
+            document.getElementById("viewEditButton").addEventListener("click", () => {
+                const number = document.getElementById("number").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+                const chainName = document.getElementById("chainName").value;
+                const viewOption = document.getElementById("view").value;
+
+                fetch(`/hotels/room/view?number=${number}&hotelAddress=${hotelAddress}&chainName=${chainName}&viewOption=${viewOption}`, {
+                    method: "PUT"}). then(response => {
+                        if (response.ok) {
+                            document.getElementById("output").innerText = "Room view option updated successfully!";
+                        } else {
+                            document.getElementById("output").innerText = "Failed to update room view option";
+                        }
+                });
+            });
+
+            // extendability handle
+            document.getElementById("extendableEditButton").addEventListener("click", () => {
+                const number = document.getElementById("number").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+                const chainName = document.getElementById("chainName").value;
+                const extendable = document.getElementById("extendable").value;
+
+                fetch(`/hotels/room/extendability?number=${number}&hotelAddress=${hotelAddress}&chainName=${chainName}&extendable=${extendable}`, {
+                    method: "PUT"}) .then (response => {
+                        if (response.ok) {
+                            document.getElementById("output").innerText = "Room extendability updated successfully!";
+                        } else {
+                            document.getElementById("output").innerText = "Failed to update room extendability";
+                        }
+                    });
+            });
+
+            //amenity handle
+
+            document.getElementById("amenityAddButton").addEventListener("click", () => {
+                const number = document.getElementById("number").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+                const chainName = document.getElementById("chainName").value;
+                const amenity = document.getElementById("amenity").value;
+
+                fetch(`/hotels/room/amenity?roomNumber=${number}&hotelAddress=${hotelAddress}&chainName=${chainName}&amenity=${amenity}`, {
+                    method: "POST"}). then(response => {
+                        if (response.ok) {
+                            document.getElementById("output").innerText = "Amenity added successfully!";
+                        } else {
+                            document.getElementById("output").innerText = "Failed to add amenity";
+                        }
+                });
+            });
+
+             document.getElementById("amenityDeleteButton").addEventListener("click", () => {
+                const number = document.getElementById("number").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+                const chainName = document.getElementById("chainName").value;
+                const amenity = document.getElementById("amenity").value;
+
+                fetch(`/hotels/room/amenity?roomNumber=${number}&hotelAddress=${hotelAddress}&chainName=${chainName}&amenity=${amenity}`, {
+                    method: "DELETE"}). then(response => {
+                        if (response.ok) {
+                            document.getElementById("output").innerText = "Amenity deleted successfully!";
+                        } else {
+                            document.getElementById("output").innerText = "Failed to delete amenity";
+                        }
+                });
+            });
+
+             //demate handle
+             document.getElementById("damageAddButton").addEventListener("click", () => {
+                const number = document.getElementById("number").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+                const chainName = document.getElementById("chainName").value;
+                const damage = document.getElementById("damage").value;
+
+                fetch(`/hotels/room/damage?roomNumber=${number}&hotelAddress=${hotelAddress}&chainName=${chainName}&damage=${damage}`, {
+                    method: "POST"}). then(response => {
+                        if (response.ok) {
+                            document.getElementById("output").innerText = "Damage added successfully!";
+                        } else {
+                            document.getElementById("output").innerText = "Failed to add damage";
+                        }
+                });
+            });
+
+             document.getElementById("damageDeleteButton").addEventListener("click", () => {
+                const number = document.getElementById("number").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+                const chainName = document.getElementById("chainName").value;
+                const damage = document.getElementById("damage").value;
+
+                fetch(`/hotels/room/damage?roomNumber=${number}&hotelAddress=${hotelAddress}&chainName=${chainName}&damage=${damage}`, {
+                    method: "DELETE"}). then(response => {
+                        if (response.ok) {
+                            document.getElementById("output").innerText = "Damage deleted successfully!";
+                        } else {
+                            document.getElementById("output").innerText = "Failed to delete damage";
+                        }
+                });
+            });
+
+        </script>
     </body>
 </html>
