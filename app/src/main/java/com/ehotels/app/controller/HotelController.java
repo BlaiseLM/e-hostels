@@ -65,6 +65,16 @@ public class HotelController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Map<String, Object>>> searchHotels(
+            @RequestParam(required = false) String chainName,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) Integer starRating,
+            @RequestParam(required = false) String phoneNumber,
+            @RequestParam(required = false) String email) {
+        return ResponseEntity.ok(hotelDAO.searchHotels(chainName, address, starRating, phoneNumber, email));
+    }
+
     @PostMapping("/chain")
     public ResponseEntity<?> createChain(@RequestParam String name, @RequestParam String centralOfficeAddress) {
         hotelChainDAO.insertChain(name, centralOfficeAddress);

@@ -7,16 +7,14 @@
 
     <body>
         <h1>hotel manage page</h1>
-        <p>hotel search</p>
 
-        <input type="text" placeholder="HotelChain"><br>
-        <input type="text" placeholder="address"><br>
-        <input type="text" placeholder="phone number"><br>
-        <input type="text" placeholder="Email"><br>
-        <input type="text" placeholder="managerID"><br>
+        <p>———————[hotel manage]———————</p>
+
+        <input id = "chainName" type="text" placeholder="HotelChain"><br>
+        <input id = "address" type="text" placeholder="address"><br>
         <p>
             star rating:
-            <select>
+            <select id = "starRating">
                 <option value="1">1 star</option>
                 <option value="2">2 stars</option>
                 <option value="3">3 stars</option>
@@ -24,11 +22,169 @@
                 <option value="5">5 stars</option>
             </select>
         </p>
+        <button id="addButton">add</button>
+        <button id ="editButton">edit starRating</button>
+        <button id ="deleteButton">delete</button><br>
 
-        <button>(search) hotel</button>
-        <button>add</button>
-        <button>edit</button>
-        <button>delete</button>
-        <p>[output will come here]</p>
+        <p>[manage phone/email - fill address& hotelChain before]</p>
+
+        <input id = "phoneNumber" type="text" placeholder="phone number">
+        <button id = phoneAddButton>add</button>
+        <button id = phoneDeleteButton>remove</button><br>
+
+        <input id = "email"type="text" placeholder="Email">
+        <button id = emailAddButton>add</button>
+        <button id = emailRemoveButton>remove</button><br>
+
+        <input id = "managerID" type="text" placeholder="managerID"><br>
+
+        <button id="searchButton">(search) hotel</button>
+        <div id="output">[output will come here]</div>
+
+        <script>
+            //when user click add button
+            document.getElementById("addButton").addEventListener("click", () => {
+                const chainName = document.getElementById("chainName").value;
+                const address = document.getElementById("address").value;
+                const starRating = document.getElementById("starRating").value;
+
+            fetch("/hotels", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({chainName, address, starRating: parseInt(starRating)})
+            }).then(response => {
+                    if (response.ok) {
+                        document.getElementById("output").innerText = "Hotel added successfully!";
+                    } else {
+                        document.getElementById("output").innerText = "failed to add hotel";
+                    }
+            })
+            });
+
+            //when user click delete button
+            document.getElementById("deleteButton").addEventListener("click", () => {
+                const chainName = document.getElementById("chainName").value;
+                const address = document.getElementById("address").value;
+
+                fetch(`/hotels?chainName=${chainName}&address=${address}`, {
+                    method: "DELETE"
+                }) .then (response => {
+                    if (response.ok) {
+                        document.getElementById("output").innerText = "Hotel deleted successfully!";
+                    } else {
+                        document.getElementById("output").innerText = "failed to delete hotel";
+                    }
+                });
+            });
+
+            //when user click search button
+            document.getElementById("searchButton").addEventListener("click", () => {
+                const ChainName = document.getElementById("chainName").value;
+                const address = document.getElementById("address").value;
+                const starRating = document.getElementById("starRating").value;
+                const phoneNumber = document.getElementById("phoneNumber").value;
+                const email = document.getElementById("email").value;
+
+                fetch(`/hotels/search?chainName=${ChainName}&address=${address}&starRating=${starRating}&phoneNumber=${phoneNumber}&email=${email}`, {
+                    method: "GET"
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        document.getElementById("output").innerText = JSON.stringify(data);
+                    } else {
+                        document.getElementById("output").innerText = "No hotels found";
+                    }
+                });
+            });
+
+            //when user click edit button
+            document.getElementById("editButton").addEventListener("click", () => {
+                const chainName = document.getElementById("chainName").value;
+                const address = document.getElementById("address").value;
+                const starRating = document.getElementById("starRating").value;
+
+                fetch(`/hotels/rating?chainName=${chainName}&address=${address}&newRating=${starRating}`, {
+                    method: "PUT"
+                }) .then(response => {
+                    if (response.ok) {
+                        document.getElementById("output").innerText = "Hotel rating updated successfully!";
+                    } else {
+                        document.getElementById("output").innerText = "failed to update hotel rating";
+                    }
+                });
+            });
+
+            //when user click email add/remove button
+            document.getElementById('emailAddButton').addEventListener("click", () => {
+                const chainName = document.getElementById("chainName").value;
+                const address = document.getElementById("address").value;
+                const email = document.getElementById("email").value;
+
+                fetch(`/hotels/email?chainName=${chainName}&address=${address}&email=${email}`, {
+                    method: "POST"
+                }). then(response => {
+                    if (response.ok) {
+                        document.getElementById("output").innerText = "Email added successfully!";
+                    } else {
+                        document.getElementById("output").innerText = "failed to add email";
+                    }
+                });
+            });
+
+            document.getElementById('emailRemoveButton').addEventListener("click", () => {
+                const chainName = document.getElementById("chainName").value;
+                const address = document.getElementById("address").value;
+                const email = document.getElementById("email").value;
+
+                fetch(`/hotels/email?chainName=${chainName}&address=${address}&email=${email}`, {
+                    method: "DELETE"
+                }). then(response => {
+                    if (response.ok) {
+                        document.getElementById("output").innerText = "Email was removed successfully!";
+                    } else {
+                        document.getElementById("output").innerText = "failed to remove email";
+                    }
+                });
+            });
+
+            //when user click phoneNumber add/remove button
+            document.getElementById('phoneAddButton').addEventListener("click", () => {
+                const chainName = document.getElementById("chainName").value;
+                const address = document.getElementById("address").value;
+                const phoneNumber = document.getElementById("phoneNumber").value;
+
+                fetch (`/hotels/phone?chainName=${chainName}&address=${address}&phoneNumber=${phoneNumber}`, {
+                    method: "POST"
+                }). then(response => {
+                    if (response.ok) {
+                        document.getElementById("output").innerText = "Phone number added successfully!";
+                    } else {
+                        document.getElementById("output").innerText = "failed to add phone number";
+                    }
+                });
+            });
+
+            document.getElementById('phoneDeleteButton').addEventListener("click", () => {
+                const chainName = document.getElementById("chainName").value;
+                const address = document.getElementById("address").value;
+                const phoneNumber = document.getElementById("phoneNumber").value;
+
+                fetch (`/hotels/phone?chainName=${chainName}&address=${address}&phoneNumber=${phoneNumber}`, {
+                    method: "DELETE"
+                }). then(response => {
+                    if (response.ok) {
+                        document.getElementById("output").innerText = "Phone number removed successfully!";
+                    } else {
+                        document.getElementById("output").innerText = "failed to remove phone number";
+                    }
+                });
+            });
+
+
+
+
+        </script>
+
     </body>
 </html>
