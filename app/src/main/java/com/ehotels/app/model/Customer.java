@@ -2,7 +2,7 @@ package com.ehotels.app.model;
 import java.time.LocalDate;
 
 public record Customer(
-    int id, 
+    Integer id,
     String firstName,
     String lastName, 
     String address, 
