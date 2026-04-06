@@ -13,11 +13,15 @@ import org.springframework.web.bind.annotation.*;
 public class HotelController {
     private final HotelDAO hotelDAO;
     private final HotelChainDAO hotelChainDAO;
+    private final RoomDAO roomDAO;
 
-    public HotelController(HotelDAO hotelDAO, HotelChainDAO hotelChainDAO) { 
+    public HotelController(HotelDAO hotelDAO, HotelChainDAO hotelChainDAO, RoomDAO roomDAO) {
         this.hotelDAO = hotelDAO;
         this.hotelChainDAO = hotelChainDAO;
+        this.roomDAO = roomDAO;
     }
+
+    //hotel controller
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Hotel hotel) {
@@ -75,6 +79,8 @@ public class HotelController {
         return ResponseEntity.ok(hotelDAO.searchHotels(chainName, address, starRating, phoneNumber, email));
     }
 
+    //hotel chain controller
+
     @PostMapping("/chain")
     public ResponseEntity<?> createChain(@RequestParam String name, @RequestParam String centralOfficeAddress) {
         hotelChainDAO.insertChain(name, centralOfficeAddress);
@@ -126,4 +132,68 @@ public class HotelController {
         List<Map<String, Object>> results = hotelChainDAO.searchHotelChain(chainName, phoneNumber, email);
         return ResponseEntity.ok(results);
     }
+
+    //room controller
+
+    @PostMapping("/room")
+    public ResponseEntity<?> insertRoom(@RequestParam int number, @RequestParam String hotelAddress, @RequestParam String chainName) {
+        roomDAO.insertRoom(number, hotelAddress, chainName);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/room")
+    public ResponseEntity<?> deleteRoom(@RequestParam int number, @RequestParam String hotelAddress, @RequestParam String chainName) {
+        roomDAO.deleteRoom(number, hotelAddress, chainName);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/room/price")
+    public ResponseEntity<?> updateRoomPrice(@RequestParam int number, @RequestParam String hotelAddress, @RequestParam String chainName, @RequestParam double priceInDollars) {
+        roomDAO.updateRoomPrice(number, hotelAddress, chainName, priceInDollars);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/room/capacity")
+    public ResponseEntity<?> updateRoomCapacity(@RequestParam int number, @RequestParam String hotelAddress, @RequestParam String chainName, @RequestParam int capacity) {
+        roomDAO.updateRoomCapacity(number, hotelAddress, chainName, capacity);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/room/view")
+    public ResponseEntity<?> updateRoomView(@RequestParam int number, @RequestParam String hotelAddress, @RequestParam String chainName, @RequestParam String viewOption) {
+        roomDAO.updateRoomView(number, hotelAddress, chainName, viewOption);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/room/extendability")
+    public ResponseEntity<?> updateRoomExtendability(@RequestParam int number, @RequestParam String hotelAddress, @RequestParam String chainName, @RequestParam boolean extendable) {
+        roomDAO.updateRoomExtendability(number, hotelAddress, chainName, extendable);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/room/amenity")
+    public ResponseEntity<?> insertAmenity(@RequestParam int roomNumber, @RequestParam String hotelAddress, @RequestParam String chainName, @RequestParam String amenity) {
+        roomDAO.insertAmenity(roomNumber, hotelAddress, chainName, amenity);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/room/amenity")
+    public ResponseEntity<?> deleteAmenity(@RequestParam int roomNumber, @RequestParam String hotelAddress, @RequestParam String chainName, @RequestParam String amenity) {
+        roomDAO.deleteAmenity(roomNumber, hotelAddress, chainName, amenity);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/room/damage")
+    public ResponseEntity<?> insertDamage(@RequestParam int roomNumber, @RequestParam String hotelAddress, @RequestParam String chainName, @RequestParam String damage) {
+        roomDAO.insertDamage(roomNumber, hotelAddress, chainName, damage);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/room/damage")
+    public ResponseEntity<?> deleteDamage(@RequestParam int roomNumber, @RequestParam String hotelAddress, @RequestParam String chainName, @RequestParam String damage) {
+        roomDAO.deleteDamage(roomNumber, hotelAddress, chainName, damage);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
