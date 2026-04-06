@@ -2,23 +2,23 @@ package com.ehotels.app.controller;
 import com.ehotels.app.dao.*;
 import com.ehotels.app.model.*;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/hotels")
 public class HotelController {
     private final HotelDAO hotelDAO;
+    private final HotelChainDAO hotelChainDAO;
 
-    // Constructor
-    public HotelController(HotelDAO hotelDAO) { this.hotelDAO = hotelDAO;}
+    public HotelController(HotelDAO hotelDAO, HotelChainDAO hotelChainDAO) { 
+        this.hotelDAO = hotelDAO;
+        this.hotelChainDAO = hotelChainDAO;
+    }
 
-    // Create a new hotel
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Hotel hotel) {
         hotelDAO.insertHotel(
@@ -29,49 +29,42 @@ public class HotelController {
         return ResponseEntity.ok().build();
     }
 
-    //delete a hotel
     @DeleteMapping
     public ResponseEntity<?> delete( @RequestParam String chainName, @RequestParam String address) {
         hotelDAO.deleteHotel(chainName, address);
         return ResponseEntity.noContent().build();
     }
 
-    // Update hotel rating
     @PutMapping("/rating")
     public ResponseEntity<?> updateHotelRating(@RequestParam String chainName, @RequestParam String address, @RequestParam int newRating) {
         hotelDAO.updateHotelRating(chainName, address, newRating);
         return ResponseEntity.ok().build();
     }
 
-    //Insert hotel phone number
     @PostMapping("/phone")
     public ResponseEntity<?> insertHotelPhone(@RequestParam String chainName, @RequestParam String address, @RequestParam String phoneNumber) {
         hotelDAO.insertHotelPhone(chainName, address, phoneNumber);
         return ResponseEntity.ok().build();
     }
 
-    //Delete hotel phone number
     @DeleteMapping("/phone")
     public ResponseEntity<?> deleteHotelPhone(@RequestParam String chainName, @RequestParam String address, @RequestParam String phoneNumber) {
         hotelDAO.deleteHotelPhone(chainName, address, phoneNumber);
         return ResponseEntity.noContent().build();
     }
 
-    //insert hotel email
     @PostMapping("/email")
     public ResponseEntity<?> insertHotelEmail(@RequestParam String chainName, @RequestParam String address, @RequestParam String email) {
         hotelDAO.insertHotelEmail(chainName, address, email);
         return ResponseEntity.ok().build();
     }
 
-    //delete hotel email
     @DeleteMapping("/email")
     public ResponseEntity<?> deleteHotelEmail(@RequestParam String chainName, @RequestParam String address, @RequestParam String email) {
         hotelDAO.deleteHotelEmail(chainName, address, email);
         return ResponseEntity.noContent().build();
     }
 
-    //serach hotels
     @GetMapping("/search")
     public ResponseEntity<List<Map<String, Object>>> searchHotels(
             @RequestParam(required = false) String chainName,
@@ -80,5 +73,57 @@ public class HotelController {
             @RequestParam(required = false) String phoneNumber,
             @RequestParam(required = false) String email) {
         return ResponseEntity.ok(hotelDAO.searchHotels(chainName, address, starRating, phoneNumber, email));
+    }
+
+    @PostMapping("/chain")
+    public ResponseEntity<?> createChain(@RequestParam String name, @RequestParam String centralOfficeAddress) {
+        hotelChainDAO.insertChain(name, centralOfficeAddress);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/chain/address")
+    public ResponseEntity<?> updateChainAddress(@RequestParam String name, @RequestParam String newAddress) {
+        hotelChainDAO.updateChainAddress(name, newAddress);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/chain")
+    public ResponseEntity<?> deleteChain(@RequestParam String name) {
+        hotelChainDAO.deleteChain(name);
+        return ResponseEntity.noContent().build();
+    }
+
+   @PostMapping("/chain/phone")
+    public ResponseEntity<?> insertChainPhone(@RequestParam String chainName, @RequestParam String phoneNumber) {
+        hotelChainDAO.insertChainPhone(chainName, phoneNumber);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/chain/phone")
+    public ResponseEntity<?> deleteChainPhone(@RequestParam String chainName, @RequestParam String phoneNumber) {
+        hotelChainDAO.deleteChainPhone(chainName, phoneNumber);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/chain/email")
+    public ResponseEntity<?> insertChainEmail(@RequestParam String chainName, @RequestParam String email) {
+        hotelChainDAO.insertChainEmail(chainName, email);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/chain/email")
+    public ResponseEntity<?> deleteChainEmail(@RequestParam String chainName, @RequestParam String email) {
+        hotelChainDAO.deleteChainEmail(chainName, email);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/chain/search")
+    public ResponseEntity<?> searchChain(
+        @RequestParam(required = false) String chainName, 
+        @RequestParam(required = false) String phoneNumber, 
+        @RequestParam(required = false) String email
+    ) {
+        List<Map<String, Object>> results = hotelChainDAO.searchHotelChain(chainName, phoneNumber, email);
+        return ResponseEntity.ok(results);
     }
 }

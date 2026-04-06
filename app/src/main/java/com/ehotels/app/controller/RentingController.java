@@ -66,7 +66,12 @@ public class RentingController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createRenting(@RequestBody Renting renting) {
+    public ResponseEntity<?> createRenting(
+        @RequestBody Renting renting,
+        @RequestParam Integer empSsn,
+        @RequestParam String empChainName,
+        @RequestParam String empHotelAddress
+    ) {
         rentingDAO.insertRenting(
             renting.roomNumber(),
             renting.hotelAddress(),
@@ -74,7 +79,10 @@ public class RentingController {
             renting.customerId(),
             renting.startDate(),
             renting.endDate(),
-            renting.payment()
+            renting.payment(),
+            empSsn,
+            empChainName,
+            empHotelAddress
         );
         return ResponseEntity.ok().build();
     }
