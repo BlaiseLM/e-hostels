@@ -9,17 +9,106 @@
         <h1>employee manage page</h1>
         <p>employee search</p>
 
-        <input type="text" placeholder="SSN"><br>
-        <input type="text" placeholder="first name"><br>
-        <input type="text" placeholder="last name"><br>
-        <input type="text" placeholder="address"><br>
-        <input type="text" placeholder="Hotel chain+adress"><br>
-        <input type="text" placeholder="Role"><br>
+        <input id="ssn" type="text" placeholder="SSN"><br>
+        <input id="firstName" type="text" placeholder="first name"><br>
+        <input id="lastName" type="text" placeholder="last name"><br>
+        <input id="address" type="text" placeholder="address"><br>
+        <input id="chainName" type="text" placeholder="Hotel chain"><br>
+        <input id="hotelAddress" type="text" placeholder="Hotel address"><br>
+        <input id="role" type="text" placeholder="Role"><br>
 
-        <button>(search) employee</button>
-        <button>add</button>
-        <button>edit</button>
-        <button>delete</button>
-        <p>[output will come here]</p>
+        <button id="searchButton">(search) employee</button>
+        <button id="addButton">add</button>
+        <button id="editButton">edit</button>
+        <button id="deleteButton">delete</button>
+        <div id = "output">[output will come here]</div>
+
+        <script>
+            //create
+            document.getElementById("addButton").addEventListener("click", () => {
+                const ssn = document.getElementById("ssn").value;
+                const chainName = document.getElementById("chainName").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+                const firstName = document.getElementById("firstName").value;
+                const lastName = document.getElementById("lastName").value;
+                const address = document.getElementById("address").value;
+                const role = document.getElementById("role").value;
+                const registrationDate = new Date().toISOString().split('T')[0];
+
+                fetch("/employees", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ssn: parseInt(ssn), chainName, hotelAddress, firstName, lastName, address, registrationDate, role})
+                }).then(response => {
+                    if (response.ok) {
+                        document.getElementById("output").innerText = "Employee added successfully!";
+                    } else {
+                        document.getElementById("output").innerText = "Failed to add employee";
+                    }
+                });
+            });
+
+            //update
+            document.getElementById("editButton").addEventListener("click", () => {
+                const ssn = document.getElementById("ssn").value;
+                const chainName = document.getElementById("chainName").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+                const firstName = document.getElementById("firstName").value;
+                const lastName = document.getElementById("lastName").value;
+                const address = document.getElementById("address").value;
+
+                fetch("/employees", {
+                    method: "PUT",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ssn: parseInt(ssn), chainName, hotelAddress, firstName, lastName, address})
+                }).then(response => {
+                    if (response.ok) {
+                        document.getElementById("output").innerText = "Employee edited successfully!";
+                    } else {
+                        document.getElementById("output").innerText = "Failed to edit employee";
+                    }
+                });
+            });
+
+            //delete
+            document.getElementById("deleteButton").addEventListener("click", () => {
+                const ssn = document.getElementById("ssn").value;
+                const chainName = document.getElementById("chainName").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+
+                fetch(`/employees?ssn=${ssn}&chainName=${chainName}&hotelAddress=${hotelAddress}`, {
+                    method: "DELETE"
+                }).then(response => {
+                    if (response.ok) {
+                        document.getElementById("output").innerText = "Employee deleted successfully!";
+                    } else {
+                        document.getElementById("output").innerText = "Failed to delete employee";
+                    }
+                });
+            });
+
+            //search
+            document.getElementById("searchButton").addEventListener("click", () => {
+                const ssn = document.getElementById("ssn").value;
+                const chainName = document.getElementById("chainName").value;
+                const hotelAddress = document.getElementById("hotelAddress").value;
+                const firstName = document.getElementById("firstName").value;
+                const lastName = document.getElementById("lastName").value;
+                const address = document.getElementById("address").value;
+                const role = document.getElementById("role").value;
+
+                fetch(`/employees/search?ssn=${ssn}&chainName=${chainName}&hotelAddress=${hotelAddress}&firstName=${firstName}&lastName=${lastName}&address=${address}&role=${role}`, {
+                    method: "GET"
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            document.getElementById("output").innerText = JSON.stringify(data);
+                        } else {
+                            document.getElementById("output").innerText = "No employees found";
+                        }
+                    });
+            });
+        </script>
     </body>
 </html>

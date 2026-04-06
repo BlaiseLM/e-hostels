@@ -66,35 +66,35 @@ public class EmployeeDAO {
         List<String> filters = new ArrayList<>();
         List<Object> params = new ArrayList<>();
         if (ssn != null) {
-            filters.add("ssn = ?");
+            filters.add("ep.ssn = ?"); //adien: #1 I've changed ssn -> ep.ssn to avoid ambiguity with the roles table
             params.add(ssn);
         }
         if (chainName != null) {
-            filters.add("chain_name = ?");
+            filters.add("ep.chain_name = ?"); //aiden: same with #1
             params.add(chainName);
         }
         if (hotelAddress != null) {
-            filters.add("hotel_address = ?");
+            filters.add("ep.hotel_address = ?"); //#1
             params.add(hotelAddress);
         }
         if (firstName != null) {
-            filters.add("first_name = ?");
+            filters.add("ep.first_name = ?");//#1
             params.add(firstName);
         }
         if (lastName != null) {
-            filters.add("last_name = ?");
+            filters.add("ep.last_name = ?");//#1
             params.add(lastName);
         }
         if (address != null) {
-            filters.add("address = ?");
+            filters.add("ep.address = ?");//#1
             params.add(address);
         }
         if (registrationDate != null) {
-            filters.add("registration_date = ?");
+            filters.add("ep.registration_date = ?");//#1
             params.add(registrationDate);
         }
         if (role != null) { 
-            filters.add("role = ?"); 
+            filters.add("ro.role = ?");//#1
             params.add(role);
         }
         String sql = "SELECT ep.*, ro.role FROM employee ep JOIN roles ro ON ep.ssn = ro.ssn AND ep.chain_name = ro.chain_name AND ep.hotel_address = ro.hotel_address WHERE 1=1";
