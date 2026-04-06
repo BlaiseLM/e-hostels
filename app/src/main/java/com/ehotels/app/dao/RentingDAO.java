@@ -18,10 +18,13 @@ public class RentingDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void insertRenting(Integer roomNumber, String hotelAddress, String chainName, Integer customerId, LocalDate startDate, LocalDate endDate, Integer payment){ 
-        String sql = "INSERT INTO renting (room_number, hotel_address, chain_name, customer_id, start_date, end_date, registration_date, payment) VALUES (?, ?, ?, ?, ?, ?, CURRENT_DATE, ?)"; 
-        jdbcTemplate.update(sql, roomNumber, hotelAddress, chainName, customerId, startDate, endDate, payment); 
-    }
+    @Transactional
+    public void insertRenting(Integer roomNumber, String hotelAddress, String chainName, Integer customerId, LocalDate startDate, LocalDate endDate, Integer payment, Integer empSsn, String empChainName, String empHotelAddress) {
+    String sql = "INSERT INTO renting (room_number, hotel_address, chain_name, customer_id, start_date, end_date, registration_date, payment) VALUES (?, ?, ?, ?, ?, ?, CURRENT_DATE, ?) RETURNING id";
+    Integer rentId = jdbcTemplate.queryForObject(sql, Integer.class, roomNumber, hotelAddress, chainName, customerId, startDate, endDate, payment);
+    String processedBySql = "INSERT INTO processedby (e_ssn, chain_name, hotel_address, rent_id, cust_id) VALUES (?, ?, ?, ?, ?)";
+    jdbcTemplate.update(processedBySql, empSsn, empChainName, empHotelAddress, rentId, customerId);
+}
 
     public void deleteRenting(Integer id){ 
         String sql = "DELETE FROM renting WHERE id = ?"; 
@@ -205,7 +208,7 @@ public class RentingDAO {
         Map<String, Object> booking = jdbcTemplate.queryForMap(sql, bookingId); 
         LocalDate startDate = ((java.sql.Date) booking.get("start_date")).toLocalDate();
         LocalDate endDate = ((java.sql.Date) booking.get("end_date")).toLocalDate();
-        insertRenting((Integer) booking.get("room_number"), hotelAddress, chainName, (Integer) booking.get("customer_id"), startDate, endDate, payment); 
+        insertRenting((Integer) booking.get("room_number"), hotelAddress, chainName, (Integer) booking.get("customer_id"), startDate, endDate, payment, ssn, chainName, hotelAddress);
         String convertSql = "INSERT INTO convertTo(ssn, chain_name, hotel_address, booking_id) VALUES (?, ?, ?, ?)"; 
         jdbcTemplate.update(convertSql, ssn, chainName, hotelAddress, bookingId); 
         deleteBooking(bookingId);
