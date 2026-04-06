@@ -1,0 +1,9 @@
+spring.application.name=app
+
+spring.datasource.url=jdbc:postgresql://<HOST>:5432/postgres?currentSchema=Hotel
+spring.datasource.username=postgres.<project_id>
+spring.datasource.password=<password>
+spring.datasource.hikari.schema=Hotel
+
+spring.datasource.driver-class-name=org.postgresql.Driver
+logging.level.org.springframework.jdbc.core=DEBUG
