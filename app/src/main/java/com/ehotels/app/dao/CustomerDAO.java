@@ -16,9 +16,9 @@ public class CustomerDAO {
         this.jdbcTemplate = jdbcTemplate; 
     }
 
-    public void insertCustomer(String firstName, String lastName, String address, String idType, String idValue, LocalDate registrationDate){ 
-        String sql = "INSERT INTO customer (first_name, last_name, address, id_type, id_value, registration_date) VALUES (?, ?, ?, ?, ?, ?)"; 
-        jdbcTemplate.update(sql, firstName, lastName, address, idType, idValue, registrationDate); 
+    public int insertCustomer(String firstName, String lastName, String address, String idType, String idValue, LocalDate registrationDate){ 
+        String sql = "INSERT INTO customer (first_name, last_name, address, id_type, id_value, registration_date) VALUES (?, ?, ?, ?, ?, ?) RETURNING id"; 
+        return jdbcTemplate.queryForObject(sql, Integer.class, firstName, lastName, address, idType, idValue, registrationDate); 
     }
 
     public void deleteCustomer(int id){ 
