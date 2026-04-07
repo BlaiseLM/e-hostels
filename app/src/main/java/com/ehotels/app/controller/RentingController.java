@@ -65,12 +65,10 @@ public class RentingController {
         return ResponseEntity.ok(rentingDAO.searchBooking(roomNumber, hotelAddress, chainName, customerId, startDate, endDate, registrationDate));
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<?> createRenting(
         @RequestBody Renting renting,
-        @RequestParam Integer empSsn,
-        @RequestParam String empChainName,
-        @RequestParam String empHotelAddress
+        @RequestParam Integer empSsn
     ) {
         rentingDAO.insertRenting(
             renting.roomNumber(),
@@ -80,9 +78,7 @@ public class RentingController {
             renting.startDate(),
             renting.endDate(),
             renting.payment(),
-            empSsn,
-            empChainName,
-            empHotelAddress
+            empSsn
         );
         return ResponseEntity.ok().build();
     }
