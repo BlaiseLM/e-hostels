@@ -23,16 +23,16 @@ public class HotelController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Hotel hotel, @RequestParam Integer managerSsn, @RequestParam String managerFirstName, @RequestParam String managerLastName, @RequestParam LocalDate managerRegistrationDate) {
+    public ResponseEntity<?> create(@RequestBody Map<String, Object> body) {
         hotelDAO.insertHotel(
-                hotel.address(),
-                hotel.chainName(),
-                hotel.starRating(),
-                managerSsn,
-                hotel.address(),
-                managerFirstName,
-                managerLastName,
-                managerRegistrationDate
+            (String) body.get("address"),
+            (String) body.get("chainName"),
+            (Integer) body.get("starRating"),
+            (Integer) body.get("ssn"),
+            (String) body.get("employeeAddress"),
+            (String) body.get("firstName"),
+            (String) body.get("lastName"),
+            LocalDate.parse((String) body.get("registrationDate"))
         );
         return ResponseEntity.ok().build();
     }
