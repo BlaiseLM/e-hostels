@@ -1,91 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>main page</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <style>
-            .checked {
-              color: orange;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>searchRoom page</h1>
-        <a href="index.html">mainpage</a>
+<head>
+    <meta charset="UTF-8">
+    <title>Search Room</title>
+</head>
+<body>
+<h1>Search Room</h1>
+<a href="index.html">mainpage</a><br><br>
 
-        <div class="star-rating">
-            <p>
-                star rating:
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
+<input id="hotelAddress" type="text" placeholder="Hotel Address"><br>
+<input id="chainName" type="text" placeholder="Hotel Chain"><br>
 
-                <select>
-                    <option value="1">1 star</option>
-                    <option value="2">2 stars</option>
-                    <option value="3">3 stars</option>
-                    <option value="4">4 stars</option>
-                    <option value="5">5 stars</option>
-                </select>
-            </p>
-        </div>
+<div>
+    <input id="startDate" type="date"> Start Date
+    <input id="endDate" type="date"> End Date
+</div>
 
-        <div>
-            <input type="text" placeholder="startDate">
-            <input type="text" placeholder="endDate">
-        </div>
+<div>Capacity:
+    <select id="capacity">
+        <option value="">Any</option>
+        <option value="1">Single</option>
+        <option value="2">Double</option>
+        <option value="3">Triple</option>
+    </select>
+    <select id="capacityOp">
+        <option value="eq">Exactly</option>
+        <option value="gt">More than</option>
+        <option value="lt">Less than</option>
+    </select>
+</div>
 
-        <div>
-            <p>room size:
-                <select>
-                    <option>Single</option>
-                    <option>Double</option>
-                </select>
-            </p>
-        </div>
+<div>View Option:
+    <select id="viewOption">
+        <option value="">Any</option>
+        <option value="sea">Sea</option>
+        <option value="mountain">Mountain</option>
+    </select>
+</div>
 
-        <div>
-            <p>location:
-                <select>
-                    <option>ottawa</option>
-                    <option>gatineau</option>
-                </select>
-            </p>
-        </div>
+<div>Extendable:
+    <select id="extendable">
+        <option value="">Any</option>
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+    </select>
+</div>
 
-        <div>
-            <p>hotel chain:
-                <select>
-                    <option>hilton</option>
-                    <option>Château Laurier</option>
-                </select>
-            </p>
-        </div>
+<div>
+    Price: <input id="price" type="number" placeholder="Price">
+    <select id="priceOp">
+        <option value="eq">Exactly</option>
+        <option value="gt">More than</option>
+        <option value="lt">Less than</option>
+    </select>
+</div><br>
 
-        <div>
-            <p>hotel's total rooms:
-                <input type="text" placeholder="Enter total room value">
-            </p>
-        </div>
+<button id="searchButton">Search Rooms</button>
+<div id="output">[results will come here]</div>
 
-        <div>
-            <p>price:
-                <input type="number" placeholder="min price">
-                <input type="number" placeholder="max price">
-            </p>
-        </div>
+<script>
+    document.getElementById("searchButton").addEventListener("click", () => {
+        const hotelAddress = document.getElementById("hotelAddress").value;
+        const chainName = document.getElementById("chainName").value;
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+        const capacity = document.getElementById("capacity").value;
+        const capacityOp = document.getElementById("capacityOp").value;
+        const viewOption = document.getElementById("viewOption").value;
+        const extendable = document.getElementById("extendable").value;
+        const price = document.getElementById("price").value;
+        const priceOp = document.getElementById("priceOp").value;
 
-        <button type="submit">submit</button>
+        let url = "/hotels/room/search?";
+        if (hotelAddress) url += "hotelAddress=" + hotelAddress + "&";
+        if (chainName) url += "chainName=" + chainName + "&";
+        if (startDate) url += "startDate=" + startDate + "&";
+        if (endDate) url += "endDate=" + endDate + "&";
+        if (capacity) url += "capacity=" + capacity + "&capacityOp=" + capacityOp + "&";
+        if (viewOption) url += "viewOption=" + viewOption + "&";
+        if (extendable) url += "extendable=" + extendable + "&";
+        if (price) url += "price=" + price + "&priceOp=" + priceOp + "&";
 
-        <div>
-            <h3>result</h3>
-            <p>[output will come here]</p>
-            <button type="submit">booking</button>
-            <button type="submit">renting</button>
-        </div>
-
-    </body>
+        fetch(url, {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    let table = "<table border='1'><tr><th>Room #</th><th>Hotel Address</th><th>Chain</th><th>Price (cents)</th><th>Capacity</th><th>View</th><th>Extendable</th></tr>";
+                    for (let i = 0; i < data.length; i++) {
+                        table += "<tr>";
+                        table += "<td>" + data[i].number + "</td>";
+                        table += "<td>" + data[i].hotel_address + "</td>";
+                        table += "<td>" + data[i].chain_name + "</td>";
+                        table += "<td>" + data[i].price + "</td>";
+                        table += "<td>" + data[i].capacity + "</td>";
+                        table += "<td>" + data[i].view_option + "</td>";
+                        table += "<td>" + data[i].extendability + "</td>";
+                        table += "</tr>";
+                    }
+                    table += "</table>";
+                    document.getElementById("output").innerHTML = table;
+                } else {
+                    document.getElementById("output").innerText = "No rooms found";
+                }
+            });
+    });
+</script>
+</body>
 </html>
