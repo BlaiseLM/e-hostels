@@ -8,33 +8,61 @@
     <body>
         <h1>SQL view page</h1>
 
-        <h2>available rooms in different areas</h2>
-        <table>
-            <tr>
-                <th>Area</th>
-                <th>available rooms</th>
-            </tr>
-            <tr>
-                <td>Ottawa</td>
-                <td>12</td>
-            </tr>
-            <tr>
-                <td>Gatineau</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>Toronto</td>
-                <td>5</td>
-            </tr>
-        </table>
+        <h2>Hotel Chain Overview</h2>
+        <button id="chainViewButton">Load Chain View</button>
+        <div id="chainOutput">[chain view will come here]</div>
 
+        <h2>Hotel Overview</h2>
+        <button id="hotelViewButton">Load Hotel View</button>
+        <div id="hotelOutput">[hotel view will come here]</div>
 
-        <h2>total capacity for hotel [value]</h2>
-        <select>
-            <option>Hilton</option>
-            <option>McDonald</option>
-            <option>KFC</option>
-        </select>
-        <p>[ouput will come here]</p>
+        <script>
+            document.getElementById("chainViewButton").addEventListener("click", () => {
+                fetch("/views/chain", {
+                    method: "GET"
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            let table = "<table border='1'><tr><th>Name</th><th>Central Office Address</th><th>Number of Hotels</th></tr>";
+                            for (let i = 0; i < data.length; i++) {
+                                table += "<tr>";
+                                table += "<td>" + data[i].name + "</td>";
+                                table += "<td>" + data[i].central_office_address + "</td>";
+                                table += "<td>" + data[i].number_of_hotels_owned + "</td>";
+                                table += "</tr>";
+                            }
+                            table += "</table>";
+                            document.getElementById("chainOutput").innerHTML = table;
+                        } else {
+                            document.getElementById("chainOutput").innerText = "No data found";
+                        }
+                    });
+            });
+
+            document.getElementById("hotelViewButton").addEventListener("click", () => {
+                fetch("/views/hotel", {
+                    method: "GET"
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            let table = "<table border='1'><tr><th>Address</th><th>Chain Name</th><th>Star Rating</th><th>Number of Rooms</th></tr>";
+                            for (let i = 0; i < data.length; i++) {
+                                table += "<tr>";
+                                table += "<td>" + data[i].address + "</td>";
+                                table += "<td>" + data[i].chain_name + "</td>";
+                                table += "<td>" + data[i].star_rating + "</td>";
+                                table += "<td>" + data[i].number_of_rooms + "</td>";
+                                table += "</tr>";
+                            }
+                            table += "</table>";
+                            document.getElementById("hotelOutput").innerHTML = table;
+                        } else {
+                            document.getElementById("hotelOutput").innerText = "No data found";
+                        }
+                    });
+            });
+        </script>
     </body>
 </html>

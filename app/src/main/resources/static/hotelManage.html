@@ -12,6 +12,10 @@
 
         <input id = "chainName" type="text" placeholder="HotelChain"><br>
         <input id = "address" type="text" placeholder="address"><br>
+        <input id = "ssn" type="text" placeholder="Manager SSN"><br>
+        <input id = "firstName" type="text" placeholder="Manager First Name"><br>
+        <input id = "lastName" type="text" placeholder="Manager Last Name"><br>
+        <input id = "employeeAddress" type="text" placeholder="Manager Address"><br>
         <p>
             star rating:
             <select id = "starRating">
@@ -47,18 +51,23 @@
                 const chainName = document.getElementById("chainName").value;
                 const address = document.getElementById("address").value;
                 const starRating = document.getElementById("starRating").value;
+                const ssn = document.getElementById("ssn").value;
+                const firstName = document.getElementById("firstName").value;
+                const lastName = document.getElementById("lastName").value;
+                const employeeAddress = document.getElementById("employeeAddress").value;
+                const registrationDate = new Date().toISOString().split('T')[0];
 
-            fetch("/hotels", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({chainName, address, starRating: parseInt(starRating)})
-            }).then(response => {
+                fetch("/hotels", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({chainName, address, starRating: parseInt(starRating), ssn: parseInt(ssn), firstName, lastName, employeeAddress, registrationDate})
+                }).then(response => {
                     if (response.ok) {
                         document.getElementById("output").innerText = "Hotel added successfully!";
                     } else {
                         document.getElementById("output").innerText = "failed to add hotel";
                     }
-            })
+                })
             });
 
             //when user click delete button

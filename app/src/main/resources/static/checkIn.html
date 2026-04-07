@@ -1,162 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>checkIn page</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <title>checkIn page</title>
+    </head>
 
-<body>
-<h1>Check-In Page</h1>
+    <body>
+        <h1>Check-In Page</h1>
 
-<!-- Employee Info (needed for renting) -->
-<h2>Employee Info</h2>
-<input id="empSsn" type="text" placeholder="Employee SSN"><br>
-<input id="empChainName" type="text" placeholder="Employee Chain Name"><br>
-<input id="empHotelAddress" type="text" placeholder="Employee Hotel Address"><br><br>
+        <!-- Employee Info (needed for renting) -->
+        <h2>Employee Info</h2>
+        <input id="empSsn" type="text" placeholder="Employee SSN"><br>
 
-<!-- Booking Search -->
-<h2>Search Booking</h2>
-<input id="searchRoomNumber" type="text" placeholder="Room Number"><br>
-<input id="searchHotelAddress" type="text" placeholder="Hotel Address"><br>
-<input id="searchChainName" type="text" placeholder="Chain Name"><br>
-<input id="searchCustomerId" type="text" placeholder="Customer ID"><br>
-<button id="searchBookingButton">Search Booking</button>
-<div id="bookingOutput">[booking search results]</div><br>
+        <!-- Booking Search -->
+        <h2>Search Booking</h2>
+        <input id="searchRoomNumber" type="text" placeholder="Room Number"><br>
+        <input id="searchHotelAddress" type="text" placeholder="Hotel Address"><br>
+        <input id="searchChainName" type="text" placeholder="Chain Name"><br>
+        <input id="searchCustomerId" type="text" placeholder="Customer ID"><br>
+        <button id="searchBookingButton">Search Booking</button>
+        <div id="bookingOutput">[booking search results]</div><br>
 
-<!-- Convert Booking to Renting -->
-<h2>Convert Booking to Renting (Check-In with Booking)</h2>
-<input id="convertBookingId" type="text" placeholder="Booking ID"><br>
-<input id="convertChainName" type="text" placeholder="Chain Name"><br>
-<input id="convertHotelAddress" type="text" placeholder="Hotel Address"><br>
-<input id="convertPayment" type="text" placeholder="Payment Amount"><br>
-<button id="convertButton">Convert Booking to Renting</button>
-<div id="convertOutput">[convert result]</div><br>
+        <!-- Convert Booking to Renting -->
+        <h2>Convert Booking to Renting (Check-In with Booking)</h2>
+        <input id="convertBookingId" type="text" placeholder="Booking ID"><br>
+        <input id="convertChainName" type="text" placeholder="Chain Name"><br>
+        <input id="convertHotelAddress" type="text" placeholder="Hotel Address"><br>
+        <input id="convertPayment" type="text" placeholder="Payment Amount"><br>
+        <button id="convertButton">Convert Booking to Renting</button>
+        <div id="convertOutput">[convert result]</div><br>
 
-<!-- Create Booking -->
-<h2>Create New Booking</h2>
-<input id="bookRoomNumber" type="text" placeholder="Room Number"><br>
-<input id="bookHotelAddress" type="text" placeholder="Hotel Address"><br>
-<input id="bookChainName" type="text" placeholder="Chain Name"><br>
-<input id="bookCustomerId" type="text" placeholder="Customer ID"><br>
-<input id="bookStartDate" type="date"><br>
-<input id="bookEndDate" type="date"><br>
-<button id="createBookingButton">Create Booking</button>
-<div id="bookingCreateOutput">[booking create result]</div><br>
+        <!-- Create Booking -->
+        <h2>Create New Booking</h2>
+        <input id="bookRoomNumber" type="text" placeholder="Room Number"><br>
+        <input id="bookHotelAddress" type="text" placeholder="Hotel Address"><br>
+        <input id="bookChainName" type="text" placeholder="Chain Name"><br>
+        <input id="bookCustomerId" type="text" placeholder="Customer ID"><br>
+        <input id="bookStartDate" type="date"><br>
+        <input id="bookEndDate" type="date"><br>
+        <button id="createBookingButton">Create Booking</button>
+        <div id="bookingCreateOutput">[booking create result]</div><br>
 
-<!-- Walk-in Renting (no booking) -->
-<h2>Walk-In Renting (No Booking)</h2>
-<input id="rentRoomNumber" type="text" placeholder="Room Number"><br>
-<input id="rentHotelAddress" type="text" placeholder="Hotel Address"><br>
-<input id="rentChainName" type="text" placeholder="Chain Name"><br>
-<input id="rentCustomerId" type="text" placeholder="Customer ID"><br>
-<input id="rentStartDate" type="date"><br>
-<input id="rentEndDate" type="date"><br>
-<input id="rentPayment" type="text" placeholder="Payment Amount"><br>
-<button id="createRentingButton">Create Renting</button>
-<div id="rentingOutput">[renting result]</div><br>
+        <!-- Walk-in Renting (no booking) -->
+        <h2>Walk-In Renting (No Booking)</h2>
+        <input id="rentRoomNumber" type="text" placeholder="Room Number"><br>
+        <input id="rentHotelAddress" type="text" placeholder="Hotel Address"><br>
+        <input id="rentChainName" type="text" placeholder="Chain Name"><br>
+        <input id="rentCustomerId" type="text" placeholder="Customer ID"><br>
+        <input id="rentStartDate" type="date"><br>
+        <input id="rentEndDate" type="date"><br>
+        <input id="rentPayment" type="text" placeholder="Payment Amount"><br>
+        <button id="createRentingButton">Create Renting</button>
+        <div id="rentingOutput">[renting result]</div><br>
 
-<script>
-    // Search Booking
-    document.getElementById("searchBookingButton").addEventListener("click", () => {
-        const roomNumber = document.getElementById("searchRoomNumber").value;
-        const hotelAddress = document.getElementById("searchHotelAddress").value;
-        const chainName = document.getElementById("searchChainName").value;
-        const customerId = document.getElementById("searchCustomerId").value;
+        <script>
+            // Search Booking
+            document.getElementById("searchBookingButton").addEventListener("click", () => {
+                const roomNumber = document.getElementById("searchRoomNumber").value;
+                const hotelAddress = document.getElementById("searchHotelAddress").value;
+                const chainName = document.getElementById("searchChainName").value;
+                const customerId = document.getElementById("searchCustomerId").value;
 
-        fetch(`/rentings/booking/search?roomNumber=${roomNumber}&hotelAddress=${hotelAddress}&chainName=${chainName}&customerId=${customerId}`, {
-            method: "GET"
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    document.getElementById("bookingOutput").innerText = JSON.stringify(data);
-                } else {
-                    document.getElementById("bookingOutput").innerText = "No bookings found";
-                }
+                fetch(`/rentings/booking/search?roomNumber=${roomNumber}&hotelAddress=${hotelAddress}&chainName=${chainName}&customerId=${customerId}`, {
+                    method: "GET"
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            document.getElementById("bookingOutput").innerText = JSON.stringify(data);
+                        } else {
+                            document.getElementById("bookingOutput").innerText = "No bookings found";
+                        }
+                    });
             });
-    });
 
-    // Convert Booking to Renting
-    document.getElementById("convertButton").addEventListener("click", () => {
-        const ssn = document.getElementById("empSsn").value;
-        const chainName = document.getElementById("convertChainName").value;
-        const hotelAddress = document.getElementById("convertHotelAddress").value;
-        const bookingId = document.getElementById("convertBookingId").value;
-        const payment = document.getElementById("convertPayment").value;
+            // Convert Booking to Renting
+            document.getElementById("convertButton").addEventListener("click", () => {
+                const ssn = document.getElementById("empSsn").value;
+                const chainName = document.getElementById("convertChainName").value;
+                const hotelAddress = document.getElementById("convertHotelAddress").value;
+                const bookingId = document.getElementById("convertBookingId").value;
+                const payment = document.getElementById("convertPayment").value;
 
-        fetch(`/rentings/convert?ssn=${ssn}&chainName=${chainName}&hotelAddress=${hotelAddress}&bookingId=${bookingId}&payment=${payment}`, {
-            method: "POST"
-        }).then(response => {
-            if (response.ok) {
-                document.getElementById("convertOutput").innerText = "Booking converted to renting successfully!";
-            } else {
-                document.getElementById("convertOutput").innerText = "Failed to convert booking";
-            }
-        });
-    });
+                fetch(`/rentings/convert?ssn=${ssn}&chainName=${chainName}&hotelAddress=${hotelAddress}&bookingId=${bookingId}&payment=${payment}`, {
+                    method: "POST"
+                }).then(response => {
+                    if (response.ok) {
+                        document.getElementById("convertOutput").innerText = "Booking converted to renting successfully!";
+                    } else {
+                        document.getElementById("convertOutput").innerText = "Failed to convert booking";
+                    }
+                });
+            });
 
-    // Create Booking
-    document.getElementById("createBookingButton").addEventListener("click", () => {
-        const roomNumber = document.getElementById("bookRoomNumber").value;
-        const hotelAddress = document.getElementById("bookHotelAddress").value;
-        const chainName = document.getElementById("bookChainName").value;
-        const customerId = document.getElementById("bookCustomerId").value;
-        const startDate = document.getElementById("bookStartDate").value;
-        const endDate = document.getElementById("bookEndDate").value;
+            // Create Booking
+            document.getElementById("createBookingButton").addEventListener("click", () => {
+                const roomNumber = document.getElementById("bookRoomNumber").value;
+                const hotelAddress = document.getElementById("bookHotelAddress").value;
+                const chainName = document.getElementById("bookChainName").value;
+                const customerId = document.getElementById("bookCustomerId").value;
+                const startDate = document.getElementById("bookStartDate").value;
+                const endDate = document.getElementById("bookEndDate").value;
 
-        fetch("/rentings/booking", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                roomNumber: parseInt(roomNumber),
-                hotelAddress,
-                chainName,
-                customerId: parseInt(customerId),
-                startDate,
-                endDate
-            })
-        }).then(response => {
-            if (response.ok) {
-                document.getElementById("bookingCreateOutput").innerText = "Booking created successfully!";
-            } else {
-                document.getElementById("bookingCreateOutput").innerText = "Failed to create booking";
-            }
-        });
-    });
+                fetch("/rentings/booking", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        roomNumber: parseInt(roomNumber),
+                        hotelAddress,
+                        chainName,
+                        customerId: parseInt(customerId),
+                        startDate,
+                        endDate
+                    })
+                }).then(response => {
+                    if (response.ok) {
+                        document.getElementById("bookingCreateOutput").innerText = "Booking created successfully!";
+                    } else {
+                        document.getElementById("bookingCreateOutput").innerText = "Failed to create booking";
+                    }
+                });
+            });
 
-    // Walk-in Renting
-    document.getElementById("createRentingButton").addEventListener("click", () => {
-        const roomNumber = document.getElementById("rentRoomNumber").value;
-        const hotelAddress = document.getElementById("rentHotelAddress").value;
-        const chainName = document.getElementById("rentChainName").value;
-        const customerId = document.getElementById("rentCustomerId").value;
-        const startDate = document.getElementById("rentStartDate").value;
-        const endDate = document.getElementById("rentEndDate").value;
-        const payment = document.getElementById("rentPayment").value;
-        const empSsn = document.getElementById("empSsn").value;
-        const empChainName = document.getElementById("empChainName").value;
-        const empHotelAddress = document.getElementById("empHotelAddress").value;
+            // Walk-in Renting
+            document.getElementById("createRentingButton").addEventListener("click", () => {
+                const roomNumber = document.getElementById("rentRoomNumber").value;
+                const hotelAddress = document.getElementById("rentHotelAddress").value;
+                const chainName = document.getElementById("rentChainName").value;
+                const customerId = document.getElementById("rentCustomerId").value;
+                const startDate = document.getElementById("rentStartDate").value;
+                const endDate = document.getElementById("rentEndDate").value;
+                const payment = document.getElementById("rentPayment").value;
+                const empSsn = document.getElementById("empSsn").value;
 
-        fetch(`/rentings?empSsn=${empSsn}&empChainName=${empChainName}&empHotelAddress=${empHotelAddress}`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                roomNumber: parseInt(roomNumber),
-                hotelAddress,
-                chainName,
-                customerId: parseInt(customerId),
-                startDate,
-                endDate,
-                payment: parseInt(payment)
-            })
-        }).then(response => {
-            if (response.ok) {
-                document.getElementById("rentingOutput").innerText = "Renting created successfully!";
-            } else {
-                document.getElementById("rentingOutput").innerText = "Failed to create renting";
-            }
-        });
-    });
-</script>
-</body>
+                fetch(`/rentings?empSsn=${empSsn}`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        roomNumber: parseInt(roomNumber),
+                        hotelAddress,
+                        chainName,
+                        customerId: parseInt(customerId),
+                        startDate,
+                        endDate,
+                        payment: parseInt(payment)
+                    })
+                }).then(response => {
+                    if (response.ok) {
+                        document.getElementById("rentingOutput").innerText = "Renting created successfully!";
+                    } else {
+                        document.getElementById("rentingOutput").innerText = "Failed to create renting";
+                    }
+                });
+            });
+        </script>
+    </body>
 </html>
