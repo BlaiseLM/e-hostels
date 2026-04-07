@@ -147,6 +147,30 @@ public class HotelController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/room/search")
+    public ResponseEntity<List<Map<String, Object>>> searchRoom(
+            @RequestParam(required = false) Integer number,
+            @RequestParam(required = false) String hotelAddress,
+            @RequestParam(required = false) String chainName,
+            @RequestParam(required = false) Integer price,
+            @RequestParam(required = false) String priceOp,
+            @RequestParam(required = false) Integer capacity,
+            @RequestParam(required = false) String capacityOp,
+            @RequestParam(required = false) String viewOption,
+            @RequestParam(required = false) Boolean extendable,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate
+        ) {
+        if (startDate != null && endDate == null || startDate == null && endDate != null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(roomDAO.searchRoom(
+            number, hotelAddress, chainName,
+            price, priceOp, capacity, capacityOp,
+            viewOption, extendable, startDate, endDate
+        ));
+    }
+
     @PutMapping("/room/price")
     public ResponseEntity<?> updateRoomPrice(@RequestParam int number, @RequestParam String hotelAddress, @RequestParam String chainName, @RequestParam double priceInDollars) {
         roomDAO.updateRoomPrice(number, hotelAddress, chainName, priceInDollars);
