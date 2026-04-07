@@ -88,8 +88,8 @@ public class HotelDAO {
             params.add(email);
         }
         String sql = "SELECT hot.*, hp.phone_number, he.email FROM hotel hot " +
-                     "LEFT JOIN hotel_phone_numbers hp ON hot.chain_name = hp.chain_name AND hot.address = hp.address " +
-                     "LEFT JOIN hotel_emails he ON hot.chain_name = he.chain_name AND hot.address = he.address";
+                     "JOIN hotel_phone_numbers hp ON hot.chain_name = hp.chain_name AND hot.address = hp.address " +
+                     "JOIN hotel_emails he ON hot.chain_name = he.chain_name AND hot.address = he.address";
         if (!filters.isEmpty()) {
             sql += " WHERE " + String.join(" AND ", filters);
         }
