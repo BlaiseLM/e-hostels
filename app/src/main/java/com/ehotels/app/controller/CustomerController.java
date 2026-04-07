@@ -2,6 +2,7 @@ package com.ehotels.app.controller;
 import com.ehotels.app.dao.*;
 import com.ehotels.app.model.*;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Customer customer) { 
-        customerDAO.insertCustomer(
+        int id = customerDAO.insertCustomer(
             customer.firstName(), 
             customer.lastName(), 
             customer.address(), 
@@ -28,7 +29,7 @@ public class CustomerController {
             customer.idValue(), 
             customer.registrationDate()
         ); 
-        return ResponseEntity.ok().build(); 
+        return ResponseEntity.created(URI.create("/customers/" + id)).build(); 
     }
 
     @DeleteMapping("/{id}")

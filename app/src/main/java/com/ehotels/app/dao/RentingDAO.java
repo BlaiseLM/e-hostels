@@ -200,17 +200,8 @@ public class RentingDAO {
     }
 
     @Transactional
-    public void convertBookingToRenting(Integer ssn, String chainName, String hotelAddress, Integer bookingId, Integer payment){
-        if (payment == null){ 
-            throw new IllegalArgumentException("No payment info provided for booking id=" + bookingId);
-        }
-        String sql = "SELECT * FROM booking WHERE id = ?"; 
-        Map<String, Object> booking = jdbcTemplate.queryForMap(sql, bookingId); 
-        LocalDate startDate = ((java.sql.Date) booking.get("start_date")).toLocalDate();
-        LocalDate endDate = ((java.sql.Date) booking.get("end_date")).toLocalDate();
-        insertRenting((Integer) booking.get("room_number"), hotelAddress, chainName, (Integer) booking.get("customer_id"), startDate, endDate, payment, ssn, chainName, hotelAddress);
-        String convertSql = "INSERT INTO convertTo(ssn, chain_name, hotel_address, booking_id) VALUES (?, ?, ?, ?)"; 
-        jdbcTemplate.update(convertSql, ssn, chainName, hotelAddress, bookingId); 
-        deleteBooking(bookingId);
+    public void convertBookingToRenting(Integer ssn, String chainName, String hotelAddress, Integer bookingId, Integer payment) {
+        String sql = "INSERT INTO convertTo (ssn, chain_name, hotel_address, booking_id) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, ssn, chainName, hotelAddress, bookingId);
     }
 }
