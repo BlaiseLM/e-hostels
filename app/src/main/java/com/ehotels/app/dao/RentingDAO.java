@@ -19,11 +19,11 @@ public class RentingDAO {
     }
 
     @Transactional
-    public void insertRenting(Integer roomNumber, String hotelAddress, String chainName, Integer customerId, LocalDate startDate, LocalDate endDate, Integer payment, Integer empSsn, String empChainName, String empHotelAddress) {
+    public void insertRenting(Integer roomNumber, String hotelAddress, String chainName, Integer customerId, LocalDate startDate, LocalDate endDate, Integer payment, Integer empSsn) {
     String sql = "INSERT INTO renting (room_number, hotel_address, chain_name, customer_id, start_date, end_date, registration_date, payment) VALUES (?, ?, ?, ?, ?, ?, CURRENT_DATE, ?) RETURNING id";
     Integer rentId = jdbcTemplate.queryForObject(sql, Integer.class, roomNumber, hotelAddress, chainName, customerId, startDate, endDate, payment);
     String processedBySql = "INSERT INTO processedby (e_ssn, chain_name, hotel_address, rent_id, cust_id) VALUES (?, ?, ?, ?, ?)";
-    jdbcTemplate.update(processedBySql, empSsn, empChainName, empHotelAddress, rentId, customerId);
+    jdbcTemplate.update(processedBySql, empSsn, chainName, hotelAddress, rentId, customerId);
 }
 
     public void deleteRenting(Integer id){ 
