@@ -22,11 +22,11 @@ public class HotelDAO {
     }
 
     @Transactional
-    public void insertHotel(String address, String chainName, Integer starRating, Integer ssn, String hotelAddress, String firstName, String lastName, LocalDate registrationDate) {
+    public void insertHotel(String hotelAddress, String chainName, Integer starRating, Integer ssn, String employeeAddress, String firstName, String lastName, LocalDate registrationDate) {
         String sql = "INSERT INTO hotel (address, chain_name, star_rating) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, address, chainName, starRating);
+        jdbcTemplate.update(sql, hotelAddress, chainName, starRating);
         String employeeSQL = "INSERT INTO employee (ssn, chain_name, hotel_address, first_name, last_name, address, registration_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(employeeSQL, ssn, chainName, hotelAddress, firstName, lastName, address, registrationDate);
+        jdbcTemplate.update(employeeSQL, ssn, chainName, hotelAddress, firstName, lastName, employeeAddress, registrationDate);
         String roleSql = "INSERT INTO roles (ssn, chain_name, hotel_address, role) VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(roleSql, ssn, chainName, hotelAddress, "manager");
     }
