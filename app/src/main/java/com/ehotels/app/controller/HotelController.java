@@ -2,6 +2,7 @@ package com.ehotels.app.controller;
 import com.ehotels.app.dao.*;
 import com.ehotels.app.model.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -21,14 +22,17 @@ public class HotelController {
         this.roomDAO = roomDAO;
     }
 
-    //hotel controller
-
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Hotel hotel) {
+    public ResponseEntity<?> create(@RequestBody Hotel hotel, @RequestParam Integer managerSsn, @RequestParam String managerFirstName, @RequestParam String managerLastName, @RequestParam LocalDate managerRegistrationDate) {
         hotelDAO.insertHotel(
                 hotel.address(),
                 hotel.chainName(),
-                hotel.starRating()
+                hotel.starRating(),
+                managerSsn,
+                hotel.address(),
+                managerFirstName,
+                managerLastName,
+                managerRegistrationDate
         );
         return ResponseEntity.ok().build();
     }
@@ -78,8 +82,6 @@ public class HotelController {
             @RequestParam(required = false) String email) {
         return ResponseEntity.ok(hotelDAO.searchHotels(chainName, address, starRating, phoneNumber, email));
     }
-
-    //hotel chain controller
 
     @PostMapping("/chain")
     public ResponseEntity<?> createChain(@RequestParam String name, @RequestParam String centralOfficeAddress) {
@@ -132,8 +134,6 @@ public class HotelController {
         List<Map<String, Object>> results = hotelChainDAO.searchHotelChain(chainName, phoneNumber, email);
         return ResponseEntity.ok(results);
     }
-
-    //room controller
 
     @PostMapping("/room")
     public ResponseEntity<?> insertRoom(@RequestParam int number, @RequestParam String hotelAddress, @RequestParam String chainName, @RequestParam double priceInDollars, @RequestParam int capacity, @RequestParam String viewOption, @RequestParam boolean extendable) {
@@ -194,6 +194,4 @@ public class HotelController {
         roomDAO.deleteDamage(roomNumber, hotelAddress, chainName, damage);
         return ResponseEntity.noContent().build();
     }
-
-
 }
