@@ -8,6 +8,7 @@
 
     <body>
         <h1>Check-In Page</h1>
+        <a href="index.html">mainpage</a><br><br>
 
         <!-- Employee Info (needed for renting) -->
         <h2>Employee Info</h2>
@@ -68,7 +69,21 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.length > 0) {
-                            document.getElementById("bookingOutput").innerText = JSON.stringify(data);
+                            let table = "<table><tr><th>ID</th><th>Room #</th><th>Hotel Address</th><th>Chain</th><th>Customer ID</th><th>Start Date</th><th>End Date</th><th>Registration Date</th></tr>";
+                            for (let i = 0; i < data.length; i++) {
+                                table += "<tr>";
+                                table += "<td>" + data[i].id + "</td>";
+                                table += "<td>" + data[i].room_number + "</td>";
+                                table += "<td>" + data[i].hotel_address + "</td>";
+                                table += "<td>" + data[i].chain_name + "</td>";
+                                table += "<td>" + data[i].customer_id + "</td>";
+                                table += "<td>" + data[i].start_date + "</td>";
+                                table += "<td>" + data[i].end_date + "</td>";
+                                table += "<td>" + data[i].registration_date + "</td>";
+                                table += "</tr>";
+                            }
+                            table += "</table>";
+                            document.getElementById("bookingOutput").innerHTML = table;
                         } else {
                             document.getElementById("bookingOutput").innerText = "No bookings found";
                         }

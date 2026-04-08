@@ -8,6 +8,7 @@
 
     <body>
         <h1>hotel manage page</h1>
+        <a href="index.html">mainpage</a><br><br>
 
         <p>[hotel manage]</p>
 
@@ -101,7 +102,18 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.length > 0) {
-                        document.getElementById("output").innerText = JSON.stringify(data);
+                        let table = "<table><tr><th>Address</th><th>Chain</th><th>Star Rating</th><th>Phone</th><th>Email</th></tr>";
+                        for (let i = 0; i < data.length; i++) {
+                            table += "<tr>";
+                            table += "<td>" + data[i].address + "</td>";
+                            table += "<td>" + data[i].chain_name + "</td>";
+                            table += "<td>" + data[i].star_rating + "</td>";
+                            table += "<td>" + data[i].phone_number + "</td>";
+                            table += "<td>" + data[i].email + "</td>";
+                            table += "</tr>";
+                        }
+                        table += "</table>";
+                        document.getElementById("output").innerHTML = table;
                     } else {
                         document.getElementById("output").innerText = "No hotels found";
                     }

@@ -8,6 +8,7 @@
 
     <body>
         <h1>customer manage page</h1>
+        <a href="index.html">mainpage</a><br><br>
         <p>customer search</p>
 
         <input id="firstName" type="text" placeholder="first name"><br>
@@ -97,7 +98,20 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.length > 0) {
-                        document.getElementById("output").innerText = JSON.stringify(data);
+                        let table = "<table><tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Address</th><th>ID Type</th><th>ID Value</th><th>Registration Date</th></tr>";
+                        for (let i = 0; i < data.length; i++) {
+                            table += "<tr>";
+                            table += "<td>" + data[i].id + "</td>";
+                            table += "<td>" + data[i].first_name + "</td>";
+                            table += "<td>" + data[i].last_name + "</td>";
+                            table += "<td>" + data[i].address + "</td>";
+                            table += "<td>" + data[i].id_type + "</td>";
+                            table += "<td>" + data[i].id_value + "</td>";
+                            table += "<td>" + data[i].registration_date + "</td>";
+                            table += "</tr>";
+                        }
+                        table += "</table>";
+                        document.getElementById("output").innerHTML = table;
                     } else {
                         document.getElementById("output").innerText = "No customers found";
                     }

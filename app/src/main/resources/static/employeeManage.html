@@ -8,6 +8,7 @@
 
     <body>
         <h1>employee manage page</h1>
+        <a href="index.html">mainpage</a><br><br>
         <p>employee search</p>
 
         <input id="ssn" type="text" placeholder="SSN"><br>
@@ -104,7 +105,20 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.length > 0) {
-                            document.getElementById("output").innerText = JSON.stringify(data);
+                            let table = "<table><tr><th>SSN</th><th>First Name</th><th>Last Name</th><th>Address</th><th>Chain</th><th>Hotel Address</th><th>Role</th></tr>";
+                            for (let i = 0; i < data.length; i++) {
+                                table += "<tr>";
+                                table += "<td>" + data[i].ssn + "</td>";
+                                table += "<td>" + data[i].first_name + "</td>";
+                                table += "<td>" + data[i].last_name + "</td>";
+                                table += "<td>" + data[i].address + "</td>";
+                                table += "<td>" + data[i].chain_name + "</td>";
+                                table += "<td>" + data[i].hotel_address + "</td>";
+                                table += "<td>" + data[i].role + "</td>";
+                                table += "</tr>";
+                            }
+                            table += "</table>";
+                            document.getElementById("output").innerHTML = table;
                         } else {
                             document.getElementById("output").innerText = "No employees found";
                         }
